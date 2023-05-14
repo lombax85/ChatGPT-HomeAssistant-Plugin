@@ -17,11 +17,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/getLightsStatusResponse'
-  /set/{id}/{status}:
+  /set/{type}/{id}/{status}:
     post:
       operationId: set
       summary: Set the status of a light, turn or on or off
       parameters:
+      - in: path
+        name: type
+        schema:
+            type: string
+            default: light
+            enum:
+              - light
+              - switch
+        required: true
+        description: The type of light, switch or light
       - in: path
         name: id
         schema:
@@ -32,6 +42,10 @@ paths:
         name: status
         schema:
             type: string
+            default: on
+            enum:
+              - on
+              - off
         required: true
         description: The status of the light
       responses:

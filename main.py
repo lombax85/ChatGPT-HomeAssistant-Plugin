@@ -13,21 +13,22 @@ app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.c
 _TODOS = {}
 
 
-
 def getLightStatus():
     url = f"{home_assistant_url}/api/states"
     response = requests.get(url, headers=headers)
     data = response.json()
 
+    valid_entities = ['light', 'switch']
+
     lights_switches_data = [{"name": entity["attributes"]["friendly_name"],
                             "id": entity["entity_id"],
                             "status": entity["state"]}
-                            for entity in data if entity["entity_id"].startswith("light.")]
+                            for entity in data if entity["entity_id"].split(".")[0] in valid_entities]
 
     return lights_switches_data
 
-def setLightStatus(light_id: str, light_status: str):
-    url = f"{home_assistant_url}/api/services/light/turn_{light_status}"
+def setLightStatus(type: str, light_id: str, light_status: str):
+    url = f"{home_assistant_url}/api/services/{type}/turn_{light_status}"
 
     payload = {"entity_id": light_id}
 
@@ -43,19 +44,18 @@ def setLightStatus(light_id: str, light_status: str):
         return False
 
 
-
 @app.get("/lights/status")
 async def get_lights_status():
     return quart.Response(response=json.dumps(getLightStatus()), status=200)
 
-@app.post("/set/<string:id>/<string:status>")
-async def set_light_status(id, status):
-    res = setLightStatus(id, status)
+@app.post("/set/<string:type>/<string:id>/<string:status>")
+async def set_light_status(type, id, status):
+    res = setLightStatus(type, id, status)
     if res:
         return "ok"
     else:
         return "error"
-
+    
 @app.get("/logo.png")
 async def plugin_logo():
     filename = 'logo.png'
