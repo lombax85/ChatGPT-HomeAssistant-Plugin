@@ -1,7 +1,3 @@
-# ChatGPT plugins quickstart
-
-Get a todo list ChatGPT plugin up and running in under 5 minutes using Python. If you do not already have plugin developer access, please [join the waitlist](https://openai.com/waitlist/plugins).
-
 ## Setup
 
 To install the required packages for this plugin, run the following command:
@@ -9,6 +5,16 @@ To install the required packages for this plugin, run the following command:
 ```bash
 pip install -r requirements.txt
 ```
+
+Configure the plugin:
+
+- Copy the example config file
+  
+```bash
+cp config.py.example config.py
+```
+- Fill your Home Assistant URL and Bearer Token
+
 
 To run the plugin, enter the following command:
 
@@ -24,7 +30,12 @@ Once the local server is running:
 4. Select "Develop your own plugin"
 5. Enter in `localhost:5003` since this is the URL the server is running on locally, then select "Find manifest file".
 
-The plugin should now be installed and enabled! You can start with a question like "What is on my todo list" and then try adding something to it as well! 
+The plugin should now be installed and enabled! 
+
+You can start by asking:
+
+- Please give me the status of the lights
+- Please turn on light called "XXX"
 
 ## Getting help
 
