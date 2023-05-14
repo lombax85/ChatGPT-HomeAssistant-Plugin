@@ -1,0 +1,5 @@
+headers = {
+    "Authorization": "Bearer YOUR_HOMEE_ASSISTANT_TOKEN",
+    "Content-Type": "application/json",
+}
+home_assistant_url = "http://YOUR_HOMEE_ASSISTANT_IP:PORT"

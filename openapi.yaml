@@ -1,93 +1,49 @@
 openapi: 3.0.1
 info:
-  title: TODO Plugin
-  description: A plugin that allows the user to create and manage a TODO list using ChatGPT. If you do not know the user's username, ask them first before making queries to the plugin. Otherwise, use the username "global".
+  title: Home Assistant Plugin
+  description: A Plugin for managing light and switches in your home. You can turn on and off lights and switches, and change the color of lights.
   version: 'v1'
 servers:
   - url: http://localhost:5003
 paths:
-  /todos/{username}:
+  /lights/status:
     get:
-      operationId: getTodos
-      summary: Get the list of todos
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
+      operationId: getLightsStatus
+      summary: Get the list of the lights, their id and their status
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTodosResponse'
+                $ref: '#/components/schemas/getLightsStatusResponse'
+  /set/{id}/{status}:
     post:
-      operationId: addTodo
-      summary: Add a todo to the list
+      operationId: set
+      summary: Set the status of a light, turn or on or off
       parameters:
       - in: path
-        name: username
+        name: id
         schema:
             type: string
         required: true
-        description: The name of the user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/addTodoRequest'
-      responses:
-        "200":
-          description: OK
-    delete:
-      operationId: deleteTodo
-      summary: Delete a todo from the list
-      parameters:
+        description: The id of the light
       - in: path
-        name: username
+        name: status
         schema:
             type: string
         required: true
-        description: The name of the user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/deleteTodoRequest'
+        description: The status of the light
       responses:
         "200":
           description: OK
-
 components:
   schemas:
-    getTodosResponse:
+    getLightsStatusResponse:
       type: object
       properties:
         todos:
           type: array
           items:
             type: string
-          description: The list of todos.
-    addTodoRequest:
-      type: object
-      required:
-      - todo
-      properties:
-        todo:
-          type: string
-          description: The todo to add to the list.
-          required: true
-    deleteTodoRequest:
-      type: object
-      required:
-      - todo_idx
-      properties:
-        todo_idx:
-          type: integer
-          description: The index of the todo to delete.
-          required: true
+          description: The list of lights.

@@ -1,9 +1,9 @@
 {
     "schema_version": "v1",
-    "name_for_human": "TODO Plugin (no auth)",
-    "name_for_model": "todo",
-    "description_for_human": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
-    "description_for_model": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
+    "name_for_human": "Home assistant plugin",
+    "name_for_model": "Home_assistant",
+    "description_for_human": "Plugin for managing light and switches in your home. You can turn on and off lights and switches.",
+    "description_for_model": "Plugin for managing light and switches in your home. You can turn on and off lights and switches.",
     "auth": {
       "type": "none"
     },

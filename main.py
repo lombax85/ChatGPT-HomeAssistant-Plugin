@@ -1,7 +1,10 @@
+from config import headers, home_assistant_url
+
 import json
 
 import quart
 import quart_cors
+import requests
 from quart import request
 
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
@@ -9,26 +12,49 @@ app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.c
 # Keep track of todo's. Does not persist if Python session is restarted.
 _TODOS = {}
 
-@app.post("/todos/<string:username>")
-async def add_todo(username):
-    request = await quart.request.get_json(force=True)
-    if username not in _TODOS:
-        _TODOS[username] = []
-    _TODOS[username].append(request["todo"])
-    return quart.Response(response='OK', status=200)
 
-@app.get("/todos/<string:username>")
-async def get_todos(username):
-    return quart.Response(response=json.dumps(_TODOS.get(username, [])), status=200)
 
-@app.delete("/todos/<string:username>")
-async def delete_todo(username):
-    request = await quart.request.get_json(force=True)
-    todo_idx = request["todo_idx"]
-    # fail silently, it's a simple plugin
-    if 0 <= todo_idx < len(_TODOS[username]):
-        _TODOS[username].pop(todo_idx)
-    return quart.Response(response='OK', status=200)
+def getLightStatus():
+    url = f"{home_assistant_url}/api/states"
+    response = requests.get(url, headers=headers)
+    data = response.json()
+
+    lights_switches_data = [{"name": entity["attributes"]["friendly_name"],
+                            "id": entity["entity_id"],
+                            "status": entity["state"]}
+                            for entity in data if entity["entity_id"].startswith("light.")]
+
+    return lights_switches_data
+
+def setLightStatus(light_id: str, light_status: str):
+    url = f"{home_assistant_url}/api/services/light/turn_{light_status}"
+
+    payload = {"entity_id": light_id}
+
+    response = requests.post(url, json=payload, headers=headers)
+    
+    print(url)
+
+    if response.status_code == 200:
+        print(f"Light {light_id} turned {light_status}")
+        return True
+    else:
+        print(f"Error: {response.status_code} - {response.text}")
+        return False
+
+
+
+@app.get("/lights/status")
+async def get_lights_status():
+    return quart.Response(response=json.dumps(getLightStatus()), status=200)
+
+@app.post("/set/<string:id>/<string:status>")
+async def set_light_status(id, status):
+    res = setLightStatus(id, status)
+    if res:
+        return "ok"
+    else:
+        return "error"
 
 @app.get("/logo.png")
 async def plugin_logo():
