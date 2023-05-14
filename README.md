@@ -2,6 +2,8 @@
 
 A Home Assistant Plugin for managing lights and switches in your home, using OpenAI's ChatGPT. You can turn lights and switches on and off, and change the color of lights.
 
+![Example](./assets/screenshot.png "Screenshot")
+
 ## Installation and Setup
 
 1. **Install the required packages**: Run the following command to install required packages:
