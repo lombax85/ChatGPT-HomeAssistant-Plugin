@@ -3,3 +3,4 @@ headers = {
     "Content-Type": "application/json",
 }
 home_assistant_url = "http://YOUR_HOME_ASSISTANT_IP:PORT"
+bearer_token = "TOKEN_FOR_THIS_API"
