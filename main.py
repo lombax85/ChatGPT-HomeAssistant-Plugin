@@ -14,7 +14,6 @@ _TODOS = {}
 
 def verify_bearer_token(request):
     auth_header = request.headers.get('Authorization')
-    print(auth_header)
     if not auth_header or auth_header.split(" ")[0].lower() != "bearer" or auth_header.split(" ")[1] != bearer_token:
         abort(401, "Invalid Token")
 
