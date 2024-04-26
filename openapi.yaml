@@ -9,7 +9,7 @@ paths:
   /lights/status:
     get:
       operationId: getLightsStatus
-      summary: Get the list of the lights, their id and their status
+      summary: Get the list of the lights, switch and sensors, their id and their status
       responses:
         "200":
           description: OK
@@ -17,40 +17,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/getLightsStatusResponse'
+      security:
+        - BearerAuth: []
   /set/{type}/{id}/{status}:
     post:
       operationId: set
       summary: Set the status of a light, turn or on or off
       parameters:
-      - in: path
-        name: type
-        schema:
-            type: string
-            default: light
-            enum:
-              - light
-              - switch
-        required: true
-        description: The type of light, switch or light
-      - in: path
-        name: id
-        schema:
-            type: string
-        required: true
-        description: The id of the light
-      - in: path
-        name: status
-        schema:
-            type: string
-            default: on
-            enum:
-              - on
-              - off
-        required: true
-        description: The status of the light
+        - in: path
+          name: type
+          schema:
+              type: string
+              default: light
+              enum:
+                - light
+                - switch
+          required: true
+          description: The type of light, switch or light
+        - in: path
+          name: id
+          schema:
+              type: string
+          required: true
+          description: The id of the light
+        - in: path
+          name: status
+          schema:
+              type: string
+              default: on
+              enum:
+                - on
+                - off
+          required: true
+          description: The status of the light
       responses:
         "200":
           description: OK
+      security:
+        - BearerAuth: []
 components:
   schemas:
     getLightsStatusResponse:
@@ -61,3 +65,8 @@ components:
           items:
             type: string
           description: The list of lights.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
